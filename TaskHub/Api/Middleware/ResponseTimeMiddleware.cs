@@ -6,11 +6,11 @@ namespace Api.Middleware
     /// <summary>
     /// Замеряет время обработки запроса. Также добавляет в ответ заголовок X-Response-Time-Ms. 
     /// </summary>
-    public class PesponseTimeMiddleware
+    public class ResponseTimeMiddleware
     {
         private readonly RequestDelegate next;
 
-        public PesponseTimeMiddleware(RequestDelegate next)
+        public ResponseTimeMiddleware(RequestDelegate next)
         {
             this.next = next;
         }
@@ -30,7 +30,7 @@ namespace Api.Middleware
             watch.Stop();
             //добавление в заголовок кол-ва миллисекунд
             if (!context.Response.HasStarted)
-                context.Response.Headers["X-Response-Time-Ms"] = watch.ElapsedMilliseconds.ToString();
+                context.Response.Headers.Append("X-Response-Time-Ms", watch.ElapsedMilliseconds.ToString());
         }
 
     }

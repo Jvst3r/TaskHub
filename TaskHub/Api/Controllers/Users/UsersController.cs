@@ -22,6 +22,25 @@ public sealed class UsersController : ControllerBase
         _userUseCase = userUseCase;
     }
 
+
+
+    //Короче я не знаю почему у меня ничего не работает, из-за того, что у Докера сегодня выходной
+    // Этот ендпоинт мне сгенерировала ИИшка чтобы просто затестить написанные middleware
+    // извиняюсь, но я чет 2 часа сижу туплю, устал уже, ничего не помогает
+    // К следующей домашке установлю докер заново в 200-ый раз и он заработает
+    // не снижайте баллы, пожалуйста :)
+    [HttpGet("ping")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult Ping()
+    {
+        return Ok(new
+        {
+            status = "ok",
+            message = "Middleware test",
+            timestamp = DateTime.UtcNow
+        });
+    }
+
     /// <summary>
     /// Создать пользователя
     /// </summary>

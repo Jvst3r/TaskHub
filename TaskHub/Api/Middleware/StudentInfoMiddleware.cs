@@ -24,8 +24,8 @@
             //добавляем заголовки с ФИО И академ группой
             if (!context.Response.HasStarted)
             {
-                context.Response.Headers["X-Student-Name"] = StudentName;
-                context.Response.Headers["X-Student-Group"] = StudentGroup;
+                context.Response.Headers.Append("X-Student-Name", StudentName);
+                context.Response.Headers.Append("X-Student-Group", StudentGroup);
             }
         }
     }
