@@ -29,7 +29,8 @@ namespace Api.Middleware
 
             watch.Stop();
             //добавление в заголовок кол-ва миллисекунд
-            context.Response.Headers["X-Response-Time-Ms"] = stopwatch.ElapsedMilliseconds.ToString();
+            if (!context.Response.HasStarted)
+                context.Response.Headers["X-Response-Time-Ms"] = watch.ElapsedMilliseconds.ToString();
         }
 
     }

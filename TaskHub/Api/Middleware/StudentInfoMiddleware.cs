@@ -22,8 +22,11 @@
             await next(context);
 
             //добавляем заголовки с ФИО И академ группой
-            context.Response.Headers["X-Student-Name"] = StudentName;
-            context.Response.Headers["X-Student-Group"] = StudentGroup;
+            if (!context.Response.HasStarted)
+            {
+                context.Response.Headers["X-Student-Name"] = StudentName;
+                context.Response.Headers["X-Student-Group"] = StudentGroup;
+            }
         }
     }
 }
