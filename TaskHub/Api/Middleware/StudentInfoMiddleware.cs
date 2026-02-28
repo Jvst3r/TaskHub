@@ -3,8 +3,8 @@
     public class StudentInfoMiddleware
     {
         private readonly RequestDelegate next;
-        private readonly string StudentName = "Пичугов Арсений Сергеевич";
-        private readonly string StudentGroup = "РИ-240911";
+        private readonly string StudentName = "Pichugov Arseny Sergeevich";
+        private readonly string StudentGroup = "RI-240911";
 
         public StudentInfoMiddleware(RequestDelegate next)
         {
