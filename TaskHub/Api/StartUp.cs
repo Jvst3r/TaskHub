@@ -81,7 +81,7 @@ public sealed class Startup
         }
 
         app.UseRouting();
-        app.UseMiddleware<ResponseTimeMiddleware>();
+        app.UseMiddleware<PesponseTimeMiddleware>();
         app.UseMiddleware<StudentInfoMiddleware>();
 
 
