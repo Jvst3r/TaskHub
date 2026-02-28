@@ -24,13 +24,18 @@ namespace Api.Middleware
         {
             //засекаем время
             var watch = Stopwatch.StartNew();
-            //ждём выполнение следующего этапа конвейера
-            await next(context);
 
-            watch.Stop();
-            //добавление в заголовок кол-ва миллисекунд
-            if (!context.Response.HasStarted)
+            //v2.0
+            context.Response.OnStarting(() =>
+            {
+                watch.Stop();
                 context.Response.Headers.Append("X-Response-Time-Ms", watch.ElapsedMilliseconds.ToString());
+
+                return Task.CompletedTask;
+            });
+
+            //ждём выполнение следующего этапа конвейера, заголовок будет добавлен благодаря делегату выше
+            await next(context);
         }
 
     }

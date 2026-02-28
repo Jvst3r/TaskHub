@@ -18,15 +18,17 @@
         /// <returns></returns>
         public async Task InvokeAsync(HttpContext context)
         {
-            //ждём выполнения конвейера
-            await next(context);
-
-            //добавляем заголовки с ФИО И академ группой
-            if (!context.Response.HasStarted)
-            {
+            //v2.0 
+            //теперь не ждём выполнения, а делаем callback-делегат
+            context.Response.OnStarting(() => 
+                {
                 context.Response.Headers.Append("X-Student-Name", StudentName);
                 context.Response.Headers.Append("X-Student-Group", StudentGroup);
-            }
+                return Task.CompletedTask;
+                });
+
+            
+            await next(context);
         }
     }
 }
