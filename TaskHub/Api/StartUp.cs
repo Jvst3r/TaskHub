@@ -40,6 +40,15 @@ public sealed class Startup
         
         services.AddScoped<IManageUserUseCase, ManageUserUseCase>();
         
+        //регистрация сервисов для выполнения задания по DI
+        services.AddSingleton<>
+        services.AddSingleton<>
+        services.AddScoped<>
+        services.AddScoped<>
+        services.AddTransient<>
+        services.AddTransient<>
+
+
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(builder =>
