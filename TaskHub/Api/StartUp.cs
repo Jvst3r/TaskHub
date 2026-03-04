@@ -1,3 +1,4 @@
+using Api.Middleware;
 using Api.UseCases.Users;
 using Api.UseCases.Users.Interfaces;
 using Dal;
@@ -80,6 +81,11 @@ public sealed class Startup
         }
 
         app.UseRouting();
+
+        //Созданные middleware`ы
+        app.UseMiddleware<ResponseTimeMiddleware>();
+        app.UseMiddleware<StudentInfoMiddleware>();
+
 
         app.UseEndpoints(endpoints =>
         {
