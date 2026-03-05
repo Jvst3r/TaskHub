@@ -1,4 +1,5 @@
 using Api.Middleware;
+using Api.Services;
 using Api.UseCases.Users;
 using Api.UseCases.Users.Interfaces;
 using Dal;
@@ -39,14 +40,14 @@ public sealed class Startup
         services.AddLogic();
         
         services.AddScoped<IManageUserUseCase, ManageUserUseCase>();
-        
+
         //регистрация сервисов для выполнения задания по DI
-        services.AddSingleton<>
-        services.AddSingleton<>
-        services.AddScoped<>
-        services.AddScoped<>
-        services.AddTransient<>
-        services.AddTransient<>
+        services.AddSingleton<ISingletonService1, SingletonService1>();
+        services.AddSingleton<ISingletonService2, SingletonService2>();
+        services.AddScoped<IScopedService1, ScopedService1>();
+        services.AddScoped<IScopedService2, ScopedService2>();
+        services.AddTransient<ITransientService1, TransientService1>();
+        services.AddTransient<ITransientService2, TransientService2>();
 
 
         services.AddCors(options =>
