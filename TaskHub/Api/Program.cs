@@ -23,7 +23,7 @@ public sealed class Program
             .Build();
 
         //DI
-        Console.WriteLine("Scope2 starting...");
+        Console.WriteLine("Scope1 starting...");
         using (var scope1 = host.Services.CreateAsyncScope())
         {
             var provider = scope1.ServiceProvider;

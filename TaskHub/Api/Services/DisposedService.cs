@@ -9,16 +9,16 @@
             ServiceName = _serviceName ?? throw new ArgumentNullException("Service without name");
             //Вывод в консоль о создании
             Console.WriteLine(
-                $"Created new service!" +
-                $"name : {ServiceName}" +
+                $"\nCreated new service!\n" +
+                $"name : {ServiceName}\n" +
                 $"Id : {InstanceId}");
         }
         public void Dispose()
         {
             //вывод в консоль об окончании жизни инстанса
             Console.WriteLine(
-                "Service was disposed!" +
-                $"name : {ServiceName}" +
+                "\nService was disposed!\n" +
+                $"name : {ServiceName}\n" +
                 $"Id : {InstanceId}");
         }
     }
