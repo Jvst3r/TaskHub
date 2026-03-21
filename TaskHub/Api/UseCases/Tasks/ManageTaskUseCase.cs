@@ -1,43 +1,49 @@
 ﻿using Api.Controllers.Tasks.Response;
 using Api.UseCases.Tasks.Interfaces;
+using Logic.TaskEntity.Services;
+using Logic.TaskEntity.Services.Interfaces;
 
 namespace Api.UseCases.Tasks
 {
-    public class ManageTaskUseCase : IManageTaskUseCase
+    internal class ManageTaskUseCase : IManageTaskUseCase
     {
-        public ManageTaskUseCase() 
+        private readonly ITaskService taskService;
+        public ManageTaskUseCase(ITaskService _taskService) 
         {
-
+            taskService = _taskService;
         }
 
-        public Task<TaskResponse> CreateTaskAsync(string title, Guid createdByUserId, CancellationToken ct)
+        public async Task<TaskResponse> CreateTaskAsync(string title, Guid createdByUserId, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var task = await taskService.CreateTaskAsync(title, createdByUserId, ct);
+            return new TaskResponse(task);
         }
 
-        public Task DeleteAllTasksAsync(CancellationToken ct)
+        public async Task DeleteAllTasksAsync(CancellationToken ct)
         {
-            throw new NotImplementedException();
+            await taskService.DeleteAllTasksAsync(ct);
         }
 
-        public Task<bool> DeleteTaskAsync(Guid id, CancellationToken ct)
+        public async Task<bool> DeleteTaskAsync(Guid id, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            return await taskService.DeleteTaskAsync(id, ct);
         }
 
-        public Task<List<TaskResponse>> GetAllTasksAsync(CancellationToken ct)
+        public async Task<TaskListResponse> GetAllTasksAsync(CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var tasks = await taskService.GetAllTasksAsync(ct);
+            return new TaskListResponse(tasks.Select(t => new TaskResponse(t)).ToList());
         }
 
-        public Task<TaskResponse?> GetTaskByIdAsync(Guid id, CancellationToken ct)
+        public async Task<TaskResponse?> GetTaskByIdAsync(Guid id, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var task = await taskService.GetTaskByIdAsync(id, ct);
+            return task is null ? null : new TaskResponse(task);
         }
 
-        public Task<bool> SetTaskTitleAsync(Guid id, string title, CancellationToken ct)
+        public async Task<bool> SetTaskTitleAsync(Guid id, string title, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            return await taskService.SetTaskTitleAsync(id, title, ct);
         }
     }
 }
