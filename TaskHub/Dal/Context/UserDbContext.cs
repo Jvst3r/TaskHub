@@ -46,12 +46,17 @@ public sealed class UserDbContext : DbContext
             .HasColumnName("title")
             .HasMaxLength(200);
 
+            entity.Property(x => x.CreatedUtc)
+            .HasColumnName("Created_At_Utc")
+            .IsRequired();
+
             entity.HasOne<User>()
             .WithMany()
             .HasForeignKey(x => x.CreatedByUserId);
 
             entity.Property(x => x.CreatedByUserId)
-            .ValueGeneratedOnAdd
+            .HasColumnName("Created_By_User_Id")
+            .IsRequired();
         });
 
         base.OnModelCreating(modelBuilder);
