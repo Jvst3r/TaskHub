@@ -14,9 +14,10 @@ public sealed class UserDbContext : DbContext
     }
 
     /// <summary>
-    /// Пользователи
+    /// Пользователи и Задачи
     /// </summary>
     public DbSet<User> Users => Set<User>();
+    public DbSet<TaskItem> Tasks => Set<TaskItem>();
 
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,6 +35,23 @@ public sealed class UserDbContext : DbContext
             entity.Property(x => x.LastActivityUtc)
                 .HasColumnName("last_activity_utc")
                 .IsRequired();
+        });
+        modelBuilder.Entity<TaskItem>(entity =>
+        {
+            entity.ToTable("tasks");
+
+            entity.HasKey(x=>x.Id);
+
+            entity.Property(x => x.Title)
+            .HasColumnName("title")
+            .HasMaxLength(200);
+
+            entity.HasOne<User>()
+            .WithMany()
+            .HasForeignKey(x => x.CreatedByUserId);
+
+            entity.Property(x => x.CreatedByUserId)
+            .ValueGeneratedOnAdd
         });
 
         base.OnModelCreating(modelBuilder);
