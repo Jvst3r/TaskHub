@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Controllers.Tasks.Request;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 
@@ -13,6 +14,8 @@ namespace Api.Controllers.Tasks
         }
         
         [HttpGet("tasks")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllTasks()
         {
             try
@@ -22,44 +25,63 @@ namespace Api.Controllers.Tasks
             }
             catch (Exception ex)
             {
-                return StatusCode(400, "Ошибка при получении задач!");
+                return StatusCode(500, "Ошибка при получении задач!");
             }
     }
 
         [HttpGet("tasks/{id:guid}")]
-        public async Task<IActionResult> GetTaskById([FromQuery]int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetTaskById([FromRoute]int id)
         {
             try
             {
                 var task = db.Tasks;
                 if (task == null)
                 {
-                    return NotFound($"Задача с id:{id} не найдена!")
+                    return NotFound($"Задача с id:{id} не найдена!");
                 }
                 return Ok(task);
             }
             catch (Exception ex) 
             {
-                return StatusCode(400, "");
+                return StatusCode(500, "");
             }
         }
 
         [HttpPost("tasks/create")]
-        public async Task<IActionResult> CreateTask([FromBody]Logic.Tasks.Task _task)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateTask([FromBody] CreateTaskRequest request)
         {
             try 
             {
-               var task = await db.Tasks.Add(_task);
+               
                return Created(task);
             }
             catch (Exception ex)
             {
-                //logger.log("Ошибка при создании задачи")
-                return StatusCode(400, "Ошибка сервера при создании задачи!");
+                //logger.log("Ошибка при создании задачи");
+                return StatusCode(500, "Ошибка сервера при создании задачи!");
             }
         }
 
-        [HttpPut("tasks/{id:guid}/title")]
-        public async Task<IActionResult> RenameTask()
+        [HttpPatch("tasks/{id:guid}/title")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RenameTask([FromBody]SetTaskTitleRequest request)
+        {
+            try
+            {
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                //logger.log("Ошибка в методе RenameTask!");
+                return StatusCode(500, "Ошибка сервера при изменении названия задачи!");
+            }
+        }
 
 }
