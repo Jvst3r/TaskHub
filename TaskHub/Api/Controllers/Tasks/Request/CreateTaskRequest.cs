@@ -1,6 +1,7 @@
 ﻿namespace Api.Controllers.Tasks.Request
 {
-    public class CreateTaskRequest
+    public sealed class CreateTaskRequest
     {
-        public string Title { get; set; }    
+        public string Title { get; set; }
     }
+}

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Logic.TaskItem.Models
+﻿namespace Api.Controllers.Tasks.Response
 {
-    public class TaskItem
+    public sealed class TaskResponse
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
