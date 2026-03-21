@@ -3,7 +3,7 @@
 {
     public sealed class TaskResponse
     {
-        public TaskResponse(Logic.TaskEntity.Models.TaskItem task)
+        public TaskResponse(Logic.TaskEntity.Models.TaskModel task)
         {
             this.Id = task.Id;
             Title = task.Title;

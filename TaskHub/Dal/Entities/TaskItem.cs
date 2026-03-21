@@ -12,6 +12,12 @@ namespace Dal.Entities
             CreatedUtc = DateTimeOffset.UtcNow;
         }
 
+        public TaskItem(string title, Guid user)
+        {
+            Title = title;
+            CreatedByUserId = user;
+        }
+
         public Guid Id { get; set; }
         public string Title { get; set; }
         public Guid CreatedByUserId { get; set; }
