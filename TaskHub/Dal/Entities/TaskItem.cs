@@ -6,6 +6,12 @@ namespace Dal.Entities
 {
     public class TaskItem
     {
+        public TaskItem() 
+        {
+            Id = Guid.NewGuid();
+            CreatedUtc = DateTimeOffset.UtcNow;
+        }
+
         public Guid Id { get; set; }
         public string Title { get; set; }
         public Guid CreatedByUserId { get; set; }
