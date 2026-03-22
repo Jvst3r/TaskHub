@@ -14,7 +14,7 @@ public sealed class UserDbContext : DbContext
     }
 
     /// <summary>
-    /// Пользователи
+    /// Пользователи и Задачи
     /// </summary>
     public DbSet<User> Users => Set<User>();
 
@@ -35,7 +35,6 @@ public sealed class UserDbContext : DbContext
                 .HasColumnName("last_activity_utc")
                 .IsRequired();
         });
-
         base.OnModelCreating(modelBuilder);
     }
 }
