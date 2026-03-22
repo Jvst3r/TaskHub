@@ -12,7 +12,7 @@ using Logic.TaskEntity.Services;
 using Logic.TaskEntity.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
+using DatabaseLibrary;
 namespace Api;
 
 /// <summary>
@@ -49,6 +49,7 @@ public sealed class Startup
         services.AddScoped<IManageUserUseCase, ManageUserUseCase>();
 
         //добавлено для задания TaskController
+        services.AddDatabase<TaskDbContext>();
         services.AddScoped<ITaskRepository, TaskRepository>();
         services.AddScoped<ITaskService, TaskService>();
         services.AddScoped<IManageTaskUseCase, ManageTaskUseCase>();
