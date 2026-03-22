@@ -32,10 +32,10 @@ namespace Dal.Context
                     .HasColumnName("created_at_utc")
                     .IsRequired();
 
-                entity.HasOne<User>()
-                    .WithMany()
-                    .HasForeignKey(x => x.CreatedByUserId)
-                    .HasConstraintName("FK_tasks_users_created_by_user_id");
+                //entity.HasOne<User>()
+                    //.WithMany()
+                    //.HasForeignKey(x => x.CreatedByUserId)
+                    //.HasConstraintName("FK_tasks_users_created_by_user_id");
 
 
                 entity.Property(x => x.CreatedByUserId)

@@ -64,10 +64,11 @@ namespace Api.Controllers.Tasks
         [FromBody] CreateTaskRequest request,
         CancellationToken cancellationToken)
         {
-            //хардкод
-            var createdBy = Guid.NewGuid();
             try
             {
+                //хардкод
+                var createdBy = Guid.Parse("62fd3021-9f6a-44df-8156-2062aa77607c");
+
                 var response = await taskUseCase.CreateTaskAsync(request.Title, createdBy, cancellationToken);
 
                 return StatusCode(201, response);
@@ -75,6 +76,7 @@ namespace Api.Controllers.Tasks
             catch (Exception ex)
             {
                 //logger.log("Ошибка при создании задачи");
+                Console.WriteLine($"\n\n{ex.Message}\n\n");
                 return StatusCode(500, "Ошибка сервера при создании задачи!");
             }
         }

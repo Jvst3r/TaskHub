@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Dal.Context;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 #nullable disable
 
@@ -23,13 +24,15 @@ namespace Dal.Migrations.TaskDb
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_tasks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_tasks_users_created_by_user_id",
-                        column: x => x.created_by_user_id,
-                        principalTable: "users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
+            migrationBuilder.AddForeignKey(
+                name: "FK_tasks_users_created_by_user_id",
+                table: "tasks",
+                column: "created_by_user_id",
+                principalTable: "users",
+
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.CreateIndex(
                 name: "IX_tasks_created_by_user_id",
@@ -42,9 +45,6 @@ namespace Dal.Migrations.TaskDb
         {
             migrationBuilder.DropTable(
                 name: "tasks");
-
-            migrationBuilder.DropTable(
-                name: "users");
         }
     }
 }

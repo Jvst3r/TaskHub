@@ -4,6 +4,7 @@ using Dal.Repositories.Interfaces;
 using Logic.TaskEntity.Models;
 using Logic.TaskEntity.Services.Interfaces;
 using System.Linq;
+using Dal.Entities;
 namespace Logic.TaskEntity.Services;
 
 public sealed class TaskService : ITaskService
@@ -17,11 +18,7 @@ public sealed class TaskService : ITaskService
 
     public async Task<TaskModel> CreateTaskAsync(string title, Guid createdByUserId, CancellationToken ct)
     {
-        var taskEntity = new TaskItem
-        {
-            Title = title,
-            CreatedByUserId = createdByUserId
-        };
+        var taskEntity = new Dal.Entities.TaskItem(title, createdByUserId);
 
         var createdEntity = await taskRepository.CreateTaskAsync(taskEntity, ct);
 
