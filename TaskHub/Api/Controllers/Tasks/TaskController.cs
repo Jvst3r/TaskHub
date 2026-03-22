@@ -19,7 +19,6 @@ namespace Api.Controllers.Tasks
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllTasks(
-            [FromBody] CreateTaskRequest? request,
             CancellationToken cancellationToken)
         {
             try
@@ -42,7 +41,7 @@ namespace Api.Controllers.Tasks
         {
             try
             {
-                var response = taskUseCase.GetTaskByIdAsync(id, cancellationToken);
+                var response = await taskUseCase.GetTaskByIdAsync(id, cancellationToken);
 
                 if (response == null)
                 {
