@@ -9,7 +9,7 @@ namespace Dal.Context
     public sealed class TaskDbContext : DbContext
     {
 
-        public TaskDbContext(DbContextOptions<UserDbContext> options)
+        public TaskDbContext(DbContextOptions<TaskDbContext> options)
         : base(options)
         {
         }
