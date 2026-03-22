@@ -68,7 +68,7 @@ namespace Api.Controllers.Tasks
             var createdBy = Guid.NewGuid();
             try
             {
-                var response = taskUseCase.CreateTaskAsync(request.Title, createdBy, cancellationToken);
+                var response = await taskUseCase.CreateTaskAsync(request.Title, createdBy, cancellationToken);
 
                 return StatusCode(201, response);
             }
