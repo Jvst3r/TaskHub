@@ -29,18 +29,19 @@ namespace Dal.Context
                     .HasMaxLength(200);
 
                 entity.Property(x => x.CreatedUtc)
-                    .HasColumnName("Created_At_Utc")
+                    .HasColumnName("created_at_utc")
                     .IsRequired();
 
                 entity.HasOne<User>()
                     .WithMany()
-                    .HasForeignKey(x => x.CreatedByUserId);
+                    .HasForeignKey(x => x.CreatedByUserId)
+                    .HasConstraintName("FK_tasks_users_created_by_user_id");
+
 
                 entity.Property(x => x.CreatedByUserId)
-                    .HasColumnName("Created_By_User_Id")
+                    .HasColumnName("created_by_user_id")
                     .IsRequired();
             });
-
-            }
+        }
     }
 }
