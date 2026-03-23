@@ -32,7 +32,7 @@ namespace Api.Controllers.Tasks
             }
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -80,7 +80,7 @@ namespace Api.Controllers.Tasks
             }
         }
 
-        [HttpPatch("{id:guid}/title")]
+        [HttpPatch("{id}/title")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RenameTask(
