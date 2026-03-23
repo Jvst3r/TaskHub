@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Dal.Entities
@@ -24,6 +25,7 @@ namespace Dal.Entities
 
         public Guid Id { get; set; }
         public string Title { get; set; }
+        [ForeignKey("users")]
         public Guid CreatedByUserId { get; set; }
         public DateTimeOffset CreatedUtc { get; set; }
     }
