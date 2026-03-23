@@ -1,13 +1,29 @@
 # TaskHub - проект для выполнения домашних заданий курса по ASP.NET
 
-Для развертывания базы данных необходимо установить Docker Desktop (или удобное для вас решение).
-В корне репозитория, где находится файл .sln, выполнить команду в терминали docker compose up -d
+## Запуск
+1) Развёртывание БД
+Для развертывания базы данных необходимо установить **Docker Desktop**.\
+В корне репозитория выполнить команду в терминале: 
+```bash
+docker compose up -d
+```
 
-Команды для применения миграций:
-1) Из папки решения устанавливаем тулзу (где .sln): dotnet tool install --global dotnet-ef
-2) Генерируем миграции:
+2) Применение миграций
+- Из папки решения установить **Microsoft.EntityFrameworkCore.Tools** (можно через Управление Пакетами NuGet):
+  ```
+  dotnet tool install --global dotnet-ef
+  ```
+- Генерируем миграции (Консоль диспетчера пакетов):
+  ```
    dotnet ef migrations add CreateUsers --project Dal --startup-project Api --context UserDbContext --output-dir Migrations
-   2.1) Если упали пробуем сбилдить проект:
+   dotnet ef migrations add CreateUsers --project Dal --startup-project Api --context TaskDbContext # После создания TaskDbContext (задание на контроллеры)
+  ```
+  Если упали пробуем пересобрать проект:
+  ```
    dotnet build Api/Api.csproj
-3) Применяем миграции:
-   dotnet ef database update --project Dal --startup-project Api --context UserDbContext
+  ```
+- Применяем миграции:
+  ```
+  dotnet ef database update --project Dal --startup-project Api --context UserDbContext
+  dotnet ef database update --project Dal --startup-project Api --context TaskDbContext # После создания TaskDbContext (задание на контроллеры)
+  ```
