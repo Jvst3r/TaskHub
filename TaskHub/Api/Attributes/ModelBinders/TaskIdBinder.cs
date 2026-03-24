@@ -3,30 +3,41 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Reflection.Metadata.Ecma335;
 
-namespace Api.Attributes
+namespace Api.Attributes.ModelBinders
 {
-    public class FromRouteTaskIdAttribute :IModelBinder
+    public class TaskIdBinder :IModelBinder
     {
         public async Task BindModelAsync(ModelBindingContext bindingContext)
         {
             var guid = bindingContext.ValueProvider.GetValue("id").FirstValue;
 
+            //отправлена пустая строка или null
             if (guid == null || string.IsNullOrWhiteSpace(guid))
             {
                 bindingContext.Result = ModelBindingResult.Failed();
                 bindingContext.HttpContext.Response.StatusCode = 400;
-                //bindingContext.HttpContext.Response.Body = "Идентификатор задачи не задан";
+                bindingContext.ModelState.AddModelError
+                    (
+                        bindingContext.ModelName,
+                        "Идентификатор задачи не задан"
+                    );
                 await Task.CompletedTask;
             }
             
+
+            //Отправлен не валидный guid
             if (!IsGuid(guid))
             {
                 bindingContext.Result = ModelBindingResult.Failed();
                 bindingContext.HttpContext.Response.StatusCode = 400;
+                bindingContext.ModelState.AddModelError
+                    (
+                        bindingContext.ModelName,
+                        "Идентификатор задачи имеет некорректный формат"
+                    );
             }
 
-            await Task.CompletedTask;
-                
+            await Task.CompletedTask;   
         }
 
         private static bool IsGuid(string value)
