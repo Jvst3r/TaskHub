@@ -17,7 +17,7 @@ namespace Api.Controllers.Tasks
             taskUseCase = _taskUseCase;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllTasks(
@@ -58,7 +58,7 @@ namespace Api.Controllers.Tasks
             }
         }
 
-        [HttpPost("new")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateTaskAsync(
