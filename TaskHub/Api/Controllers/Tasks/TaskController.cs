@@ -34,11 +34,10 @@ namespace Api.Controllers.Tasks
         }
 
         [HttpGet("{id}")]
-        [FromRouteTaskId]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTaskById([FromRoute] Guid id,
+        public async Task<IActionResult> GetTaskById([FromRouteTaskId] Guid id,
         CancellationToken cancellationToken)
         {
             try
@@ -83,11 +82,10 @@ namespace Api.Controllers.Tasks
         }
 
         [HttpPatch("{id}/title")]
-        [FromRouteTaskId]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RenameTask(
-            [FromRoute] Guid id,
+            [FromRouteTaskId] Guid id,
             [FromBody] SetTaskTitleRequest request,
             CancellationToken cancellationToken)
         {
@@ -114,12 +112,11 @@ namespace Api.Controllers.Tasks
 
 
         [HttpDelete("{id}")]
-        [FromRouteTaskId]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteTaskByIdAsync(
-            [FromRoute] Guid id,
+            [FromRouteTaskId] Guid id,
             CancellationToken cancellationToken)
         {
             try
