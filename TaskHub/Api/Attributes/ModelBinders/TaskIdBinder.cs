@@ -7,7 +7,7 @@ namespace Api.Attributes.ModelBinders
 {
     public class TaskIdBinder :IModelBinder
     {
-        public async Task BindModelAsync(ModelBindingContext bindingContext)
+        public Task BindModelAsync(ModelBindingContext bindingContext)
         {
             var guid = bindingContext.ValueProvider.GetValue("id").FirstValue;
 
@@ -21,12 +21,13 @@ namespace Api.Attributes.ModelBinders
                         bindingContext.ModelName,
                         "Идентификатор задачи не задан"
                     );
-                await Task.CompletedTask;
+                return Task.CompletedTask;
             }
-            
+
 
             //Отправлен не валидный guid
-            if (!IsGuid(guid))
+            Guid parsedGuid;
+            if (!Guid.TryParse(guid, out parsedGuid))
             {
                 bindingContext.Result = ModelBindingResult.Failed();
                 bindingContext.HttpContext.Response.StatusCode = 400;
@@ -35,14 +36,17 @@ namespace Api.Attributes.ModelBinders
                         bindingContext.ModelName,
                         "Идентификатор задачи имеет некорректный формат"
                     );
+                return Task.CompletedTask;
             }
 
-            await Task.CompletedTask;   
+            bindingContext.Result = ModelBindingResult.Success(parsedGuid);
+            return Task.CompletedTask;   
         }
 
+        //не так прочитал задание но жаль удалять:(
         private static bool IsGuid(string value)
         {
-            if (value.Length != 32)
+            if (value.Length != 36)
             {
                 return false;
             }
