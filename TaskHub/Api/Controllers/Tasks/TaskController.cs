@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 namespace Api.Controllers.Tasks
 {
     [Route("tasks")]
+    [ApiController]
     public sealed class TaskController : ControllerBase
     {
         private readonly IManageTaskUseCase taskUseCase;
@@ -57,7 +58,7 @@ namespace Api.Controllers.Tasks
             }
         }
 
-        [HttpPost]
+        [HttpPost("new")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateTaskAsync(

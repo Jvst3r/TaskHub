@@ -43,10 +43,7 @@ public sealed class Startup
     /// <param name="services">Коллекция сервисов</param>
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers(options =>
-        {
-            options.ModelBinderProviders.Add(new FromRouteTaskIdAttribute());
-        });
+        services.AddControllers();
         services.AddDal();
         services.AddLogic();
         

@@ -9,7 +9,7 @@ namespace Api.Attributes.ModelBinders
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            var guid = bindingContext.ValueProvider.GetValue("id").FirstValue;
+            var guid = bindingContext.ValueProvider.GetValue("id").First();
 
             //отправлена пустая строка или null
             if (guid == null || string.IsNullOrWhiteSpace(guid))
