@@ -1,4 +1,5 @@
-﻿using Api.Controllers.Tasks.Request;
+﻿using Api.Attributes.ModelBinders;
+using Api.Controllers.Tasks.Request;
 using Api.UseCases.Tasks.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,7 @@ namespace Api.Controllers.Tasks
         }
 
         [HttpGet("{id}")]
+        [FromRouteTaskId]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -81,6 +83,7 @@ namespace Api.Controllers.Tasks
         }
 
         [HttpPatch("{id}/title")]
+        [FromRouteTaskId]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RenameTask(
@@ -111,6 +114,7 @@ namespace Api.Controllers.Tasks
 
 
         [HttpDelete("{id}")]
+        [FromRouteTaskId]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
