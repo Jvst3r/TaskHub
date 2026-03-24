@@ -13,6 +13,7 @@ using Logic.TaskEntity.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using DatabaseLibrary;
+using Api.Attributes.ModelBinders;
 namespace Api;
 
 /// <summary>
@@ -42,7 +43,10 @@ public sealed class Startup
     /// <param name="services">Коллекция сервисов</param>
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.ModelBinderProviders.Add(new FromRouteTaskIdAttribute());
+        });
         services.AddDal();
         services.AddLogic();
         
