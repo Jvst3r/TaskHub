@@ -7,7 +7,7 @@ namespace Api.Attributes.Filters
     {
         private readonly ILogger logger;
         private readonly Stopwatch watch;
-        public RequestLoggingFilter(ILogger _logger)
+        public RequestLoggingFilter(ILogger<RequestLoggingFilter> _logger)
         {
             logger = _logger;
             watch = new Stopwatch();
