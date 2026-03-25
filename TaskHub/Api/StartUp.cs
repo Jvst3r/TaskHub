@@ -13,6 +13,7 @@ using Logic.TaskEntity.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using DatabaseLibrary;
+using Api.Attributes.Filters;
 namespace Api;
 
 /// <summary>
@@ -53,6 +54,12 @@ public sealed class Startup
         services.AddScoped<ITaskRepository, TaskRepository>();
         services.AddScoped<ITaskService, TaskService>();
         services.AddScoped<IManageTaskUseCase, ManageTaskUseCase>();
+
+        //фильтры для задания Filters
+        services.AddScoped<RequestLoggingFilter>();
+        services.AddScoped<StudentInfoHeadersFilter>();
+        services.AddScoped<ValidateCreateTaskRequestFilter>();
+        services.AddScoped<ValidateSetTaskTitleRequestFilter>();
 
         services.AddCors(options =>
         {
