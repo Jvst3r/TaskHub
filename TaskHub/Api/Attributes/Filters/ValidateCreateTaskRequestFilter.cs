@@ -10,15 +10,17 @@ namespace Api.Attributes.Filters
         //использую ActionExecuting для валидации до начала выполнения контроллера
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            context.ActionArguments.TryGetValue("request", out var requestobj);
 
-            var body = context.HttpContext.Request.Body;
-            if (body == null)
+
+            if (requestobj == null)
             {
                 context.Result = new BadRequestObjectResult("Тело запроса отсутствует");
                 return;
             }
 
-            var id = (Guid)context.ActionArguments["id"];
+            var dto = (CreateTaskRequest) requestobj;
+            var id = dto.UserId;
             if (id == Guid.Empty || 
                 string.IsNullOrEmpty(id.ToString()))
             {
@@ -26,7 +28,7 @@ namespace Api.Attributes.Filters
                 return;
             }
 
-            var title = (string)context.ActionArguments["title"];
+            var title = dto.Title;
             if (string.IsNullOrEmpty(title))
             {
                 context.Result = new BadRequestObjectResult("Название задачи не задано");
