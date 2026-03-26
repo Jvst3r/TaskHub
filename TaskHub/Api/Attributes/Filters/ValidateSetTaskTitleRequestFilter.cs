@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Controllers.Tasks.Request;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Api.Attributes.Filters
@@ -8,8 +9,12 @@ namespace Api.Attributes.Filters
         //использую ActionExecuting для валидации до начала выполнения контроллера
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var body = context.HttpContext.Request.Body;
-            if (body == null)
+            //посмотрел что приходит, оказывается всё время это было не body, а request
+            var request = context.ActionArguments["request"];
+
+            var dto = (SetTaskTitleRequest)request;
+
+                if (dto == null || string.IsNullOrEmpty(dto.Title))
             {
                 context.Result = new BadRequestObjectResult("Тело запроса отсутствует");
                 return;
