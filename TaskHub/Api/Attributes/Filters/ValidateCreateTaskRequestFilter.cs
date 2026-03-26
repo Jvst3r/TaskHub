@@ -19,6 +19,7 @@ namespace Api.Attributes.Filters
                 return;
             }
 
+
             var dto = (CreateTaskRequest) requestobj;
             var id = dto.UserId;
             if (id == Guid.Empty || 
