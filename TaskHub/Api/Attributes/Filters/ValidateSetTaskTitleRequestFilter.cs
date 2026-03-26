@@ -10,7 +10,8 @@ namespace Api.Attributes.Filters
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             //посмотрел что приходит, оказывается всё время это было не body, а request
-            var request = context.ActionArguments["request"];
+            object request;
+            context.ActionArguments.TryGetValue("request",out request);
 
             var dto = (SetTaskTitleRequest)request;
 
