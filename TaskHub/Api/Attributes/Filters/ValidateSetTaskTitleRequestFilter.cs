@@ -10,10 +10,14 @@ namespace Api.Attributes.Filters
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             //посмотрел что приходит, оказывается всё время это было не body, а request
-            object request;
-            context.ActionArguments.TryGetValue("request",out request);
+            
+            if (!context.ActionArguments.TryGetValue("request", out var requestObj))
+            {
+                context.Result = new BadRequestObjectResult("Тело запроса отсутствует");
+                return;
+            }
 
-            var dto = (SetTaskTitleRequest)request;
+            var dto = (SetTaskTitleRequest)requestObj;
 
                 if (dto == null || string.IsNullOrEmpty(dto.Title))
             {
