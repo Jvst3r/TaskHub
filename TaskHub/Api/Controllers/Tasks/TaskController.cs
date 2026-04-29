@@ -26,7 +26,7 @@ namespace Api.Controllers.Tasks
                 var tasks = await taskUseCase.GetAllTasksAsync(cancellationToken);
                 return Ok(tasks);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return StatusCode(500, "Ошибка при получении задач!");
             }
@@ -50,7 +50,7 @@ namespace Api.Controllers.Tasks
 
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return StatusCode(500, $"Ошибка при получении задачи с id:{id}!");
             }
@@ -102,7 +102,7 @@ namespace Api.Controllers.Tasks
 
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //logger.log("Ошибка в методе RenameTask!");
                 return StatusCode(500, "Ошибка сервера при изменении названия задачи!");
@@ -129,7 +129,7 @@ namespace Api.Controllers.Tasks
 
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, $"Ошибка сервера при удалении задачи с id:{id}!");
             }
@@ -146,7 +146,7 @@ namespace Api.Controllers.Tasks
                 await taskUseCase.DeleteAllTasksAsync(cancellationToken);
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Ошибка при удалении всех задач!");
             }
