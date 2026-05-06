@@ -45,11 +45,11 @@ namespace TaskHub.Tests
         [Fact]
         public async Task GetTaskByIdAsyncWhenTaskIsNotExist()
         {
-            var id = Guid.Parse("12345678-1234-1234-12345678");
+            var id = Guid.NewGuid();
             taskRepository.Setup(r => r.GetTaskByIdAsync(id, It.IsAny<CancellationToken>()))
-                                                                    .ReturnsAsync(new TaskItem());
+                                                                    .ReturnsAsync((TaskItem?)null);
 
-            var result = taskService.GetTaskByIdAsync(id, CancellationToken.None);
+            var result = await taskService.GetTaskByIdAsync(id, CancellationToken.None);
 
             Assert.Null(result);
         }
