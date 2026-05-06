@@ -96,6 +96,33 @@ namespace TaskHub.Tests
             Assert.True(result.IsCompleted);
         }
 
+        [Fact]
+        public async Task DeleteTaskByIdWhenTaskExists()
+        {
+            taskRepository.Setup(r => r.DeleteTaskAsync(It.IsAny<Guid>(),It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+            var result = taskService.DeleteTaskAsync(Guid.NewGuid(), It.IsAny<CancellationToken>()).Result;
+
+            Assert.NotNull(result);
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task DeleteTaskByIdWhenTaskDoesntExists()
+        {
+            taskRepository.Setup(r => r.DeleteTaskAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
+
+            var result = taskService.DeleteTaskAsync(Guid.NewGuid(),CancellationToken.None).Result;
+
+            Assert.NotNull(result);
+            Assert.False(result);
+        }
+        
+        public async Task SetTitleAsyncWhenTitleIsValid()
+        {
+            
+        }
+
         
     }
 }
