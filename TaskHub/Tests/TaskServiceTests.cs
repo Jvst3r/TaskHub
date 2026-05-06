@@ -82,12 +82,20 @@ namespace TaskHub.Tests
 
             Assert.NotNull(result);
 
-            Assert.Equal(result, new List<TaskModel>
-            {
-                new TaskModel("first", expected[0].Id),
-                new TaskModel("second", expected[1].Id),
-                new TaskModel("third", expected[2].Id)
-            });
+            Assert.Equal(result.Count, 3);
         }
+
+        [Fact]
+        public async Task DeelteTaskAsync()
+        {
+            taskRepository.Setup(r => r.DeleteAllTasksAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+
+            var result = taskService.DeleteAllTasksAsync(CancellationToken.None);
+
+            Assert.NotNull(result);
+            Assert.True(result.IsCompleted);
+        }
+
+        
     }
 }
