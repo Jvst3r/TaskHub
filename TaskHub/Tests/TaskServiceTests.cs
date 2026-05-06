@@ -120,7 +120,24 @@ namespace TaskHub.Tests
         
         public async Task SetTitleAsyncWhenTitleIsValid()
         {
-            
+            taskRepository.Setup(r => r.UpdateTaskTitleAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+            var result = taskService.SetTaskTitleAsync(Guid.NewGuid(), "new title", CancellationToken.None).Result;
+
+            Assert.NotNull(result);
+            Assert.True(result);
+        }
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public async Task SetTitleAsyncWhenTitleIsNotValid(string title)
+        {
+            taskRepository.Setup(r => r.UpdateTaskTitleAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
+
+            var result = taskService.SetTaskTitleAsync(Guid.NewGuid(), title, CancellationToken.None).Result;
+
+            Assert.NotNull(result);
+            Assert.False(result);
         }
 
         
