@@ -23,23 +23,35 @@ namespace TaskHub.Tests
         public async Task CreateTaskAsyncTestWhenDataIsValid()
         {
             var title = "ValidTitle";
-            var userId = new Guid();
+            var userId = Guid.NewGuid();
 
-            var createdModel = new TaskModel(title, userId);
+            var createdModel = new TaskItem(title, userId);
 
             taskRepository
                 .Setup(r => r.CreateTaskAsync
                 (It.IsAny<TaskItem>(), 
-                It.IsAny<CancellationToken>()));
+                It.IsAny<CancellationToken>())).ReturnsAsync(createdModel);
 
             var result = await taskService.CreateTaskAsync(title, userId, CancellationToken.None);
 
             Assert.NotNull(result);
 
-            Assert.Equal(createdModel, result);
-
             Assert.Equal(createdModel.Id, result.Id);
 
+            Assert.Equal(createdModel.Title, result.Title);
+
+        }
+
+        [Fact]
+        public async Task GetTaskByIdAsyncWhenTaskIsNotExist()
+        {
+            var id = Guid.Parse("12345678-1234-1234-12345678");
+            taskRepository.Setup(r => r.GetTaskByIdAsync(id, It.IsAny<CancellationToken>()))
+                                                                    .ReturnsAsync(new TaskItem());
+
+            var result = taskService.GetTaskByIdAsync(id, CancellationToken.None);
+
+            Assert.Null(result);
         }
 
     }
