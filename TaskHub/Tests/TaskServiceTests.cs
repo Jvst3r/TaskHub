@@ -10,9 +10,9 @@ namespace TaskHub.Tests
 {
     public class TaskServiceTests
     {
-        private readonly ITaskService taskService ;
+        private readonly ITaskService taskService;
         private readonly Mock<ITaskRepository> taskRepository;
-      
+
         public TaskServiceTests()
         {
             taskRepository = new Mock<ITaskRepository>();
@@ -29,7 +29,7 @@ namespace TaskHub.Tests
 
             taskRepository
                 .Setup(r => r.CreateTaskAsync
-                (It.IsAny<TaskItem>(), 
+                (It.IsAny<TaskItem>(),
                 It.IsAny<CancellationToken>())).ReturnsAsync(createdModel);
 
             var result = await taskService.CreateTaskAsync(title, userId, CancellationToken.None);
@@ -54,5 +54,40 @@ namespace TaskHub.Tests
             Assert.Null(result);
         }
 
+        [Fact]
+        public async Task GetAllTasksAsyncWhenNoTasks()
+        {
+            taskRepository.Setup(r => r.GetAllTasksAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new List<TaskItem>());
+
+            var result = taskService.GetAllTasksAsync(CancellationToken.None);
+
+            Assert.NotNull(result);
+
+            Assert.Equal(result.Result.Count, 0);
+        }
+
+        [Fact]
+        public async Task GetAllTaskAsyncWhenListHasTasks()
+        {
+            var expected = new List<TaskItem>
+            {
+                new TaskItem("first", Guid.NewGuid()),
+                new TaskItem("second", Guid.NewGuid()),
+                new TaskItem("third", Guid.NewGuid())
+            };
+
+            taskRepository.Setup(r => r.GetAllTasksAsync(It.IsAny<CancellationToken>())).ReturnsAsync(expected);
+
+            var result = taskService.GetAllTasksAsync(CancellationToken.None).Result;
+
+            Assert.NotNull(result);
+
+            Assert.Equal(result, new List<TaskModel>
+            {
+                new TaskModel("first", expected[0].Id),
+                new TaskModel("second", expected[1].Id),
+                new TaskModel("third", expected[2].Id)
+            });
+        }
     }
 }
