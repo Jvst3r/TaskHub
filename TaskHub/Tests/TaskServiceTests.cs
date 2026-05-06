@@ -59,11 +59,11 @@ namespace TaskHub.Tests
         {
             taskRepository.Setup(r => r.GetAllTasksAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new List<TaskItem>());
 
-            var result = taskService.GetAllTasksAsync(CancellationToken.None);
+            var result = await taskService.GetAllTasksAsync(CancellationToken.None);
 
             Assert.NotNull(result);
 
-            Assert.Equal(result.Result.Count, 0);
+            Assert.Equal(0, result.Count);
         }
 
         [Fact]
@@ -78,11 +78,11 @@ namespace TaskHub.Tests
 
             taskRepository.Setup(r => r.GetAllTasksAsync(It.IsAny<CancellationToken>())).ReturnsAsync(expected);
 
-            var result = taskService.GetAllTasksAsync(CancellationToken.None).Result;
+            var result = await taskService.GetAllTasksAsync(CancellationToken.None);
 
             Assert.NotNull(result);
 
-            Assert.Equal(result.Count, 3);
+            Assert.Equal(3, result.Count);
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace TaskHub.Tests
         {
             taskRepository.Setup(r => r.DeleteTaskAsync(It.IsAny<Guid>(),It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
-            var result = taskService.DeleteTaskAsync(Guid.NewGuid(), It.IsAny<CancellationToken>()).Result;
+            var result = await taskService.DeleteTaskAsync(Guid.NewGuid(), It.IsAny<CancellationToken>());
 
             Assert.NotNull(result);
             Assert.True(result);
@@ -112,17 +112,17 @@ namespace TaskHub.Tests
         {
             taskRepository.Setup(r => r.DeleteTaskAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
-            var result = taskService.DeleteTaskAsync(Guid.NewGuid(),CancellationToken.None).Result;
+            var result = await taskService.DeleteTaskAsync(Guid.NewGuid(), CancellationToken.None);
 
             Assert.NotNull(result);
             Assert.False(result);
         }
-        
+        [Fact]
         public async Task SetTitleAsyncWhenTitleIsValid()
         {
             taskRepository.Setup(r => r.UpdateTaskTitleAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
-            var result = taskService.SetTaskTitleAsync(Guid.NewGuid(), "new title", CancellationToken.None).Result;
+            var result = await taskService.SetTaskTitleAsync(Guid.NewGuid(), "new title", CancellationToken.None);
 
             Assert.NotNull(result);
             Assert.True(result);
@@ -134,7 +134,7 @@ namespace TaskHub.Tests
         {
             taskRepository.Setup(r => r.UpdateTaskTitleAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
-            var result = taskService.SetTaskTitleAsync(Guid.NewGuid(), title, CancellationToken.None).Result;
+            var result = await taskService.SetTaskTitleAsync(Guid.NewGuid(), title, CancellationToken.None);
 
             Assert.NotNull(result);
             Assert.False(result);
