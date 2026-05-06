@@ -6,7 +6,7 @@ using Dal.Entities;
 using Dal.Repositories;
 using Logic.TaskEntity.Services;
 using Logic.TaskEntity.Models;
-namespace TaskHub.Tests
+namespace Tests.UnitTests
 {
     public class TaskServiceTests
     {
