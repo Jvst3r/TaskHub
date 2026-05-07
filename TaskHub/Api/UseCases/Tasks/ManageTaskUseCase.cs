@@ -5,7 +5,7 @@ using Logic.TaskEntity.Services.Interfaces;
 
 namespace Api.UseCases.Tasks
 {
-    internal class ManageTaskUseCase : IManageTaskUseCase
+    public class ManageTaskUseCase : IManageTaskUseCase
     {
         private readonly ITaskService taskService;
         public ManageTaskUseCase(ITaskService _taskService) 
