@@ -21,14 +21,38 @@ namespace Tests.UnitTests
             taskController = new TaskController(manageTaskUseCase.Object);
         }
 
-        [Theory]
-        [InlineData(0,new TaskListResponse(new List<TaskModel> ))]
-        [InlineData(5)]
-        public async Task GetAllTasksAsyncWhenTask(int count, TaskListResponse expected)
+        [Fact]
+        public async Task GetAllTasksAsyncWhenNoTasks()
         {
+            manageTaskUseCase.Setup(uc => uc
+                                        .GetAllTasksAsync(It.IsAny<CancellationToken>()))
+                                            .ReturnsAsync(new TaskListResponse(list: new List<TaskResponse>()));
 
+            var result = await taskController.GetAllTasks(CancellationToken.None);
+
+            Assert.NotNull(result);
+            Assert.IsType<TaskListResponse>(result); //новый для меня метод для проверки,
+                                                     //приколдес че сказать, я так понял в API-тестах там всё что тестится - это типы значений
+            Assert.Equal(0, result.);
         }
 
+        [Fact]
+        public async Task GetAllTasksAsyncWhenTasksExists()
+        {
+            manageTaskUseCase.Setup(uc => uc
+                                        .GetAllTasksAsync(It.IsAny<CancellationToken>()))
+                                            .ReturnsAsync(new TaskListResponse(list: new List<TaskResponse>
+                                            {
+                                                new TaskResponse(new TaskModel("test", Guid.NewGuid()))
+                                            }));
+
+            var result = await taskController.GetAllTasks(CancellationToken.None);
+
+            Assert.NotNull(result);
+            Assert.IsType<TaskListResponse>(result); 
+            Assert.Equal(0, result.TaskList.Count);
+            Assert.Equal(StatusCode.Ok)
+        }
 
     }
 }
