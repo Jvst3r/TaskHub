@@ -13,14 +13,29 @@ namespace Tests.IntegrationTests
         {
             builder.ConfigureServices(services =>
             {
-                var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<TaskDbContext>));
-                
-                if (descriptor != null)
-                    services.Remove(descriptor);
+                var descriptors = services
+                    .Where(d =>
+                        d.ServiceType == typeof(DbContextOptions<TaskDbContext>) ||
+                        d.ServiceType == typeof(TaskDbContext) ||
+                        d.ImplementationType == typeof(TaskDbContext))
+                    .ToList();
 
-                services.AddDbContext<TaskDbContext>(options =>
+                foreach (var descriptor in descriptors)
                 {
-                    options.UseInMemoryDatabase("ForTasksTestDb");
+                    services.Remove(descriptor);
+                }
+
+                services.AddSingleton(provider =>
+                {
+                    return new DbContextOptionsBuilder<TaskDbContext>()
+                        .UseInMemoryDatabase("ForTasksTestDb")
+                        .Options;
+                });
+
+                services.AddScoped<TaskDbContext>(provider =>
+                {
+                    var options = provider.GetRequiredService<DbContextOptions<TaskDbContext>>();
+                    return new TaskDbContext(options);
                 });
             });
         }
