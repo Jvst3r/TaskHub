@@ -1,4 +1,5 @@
 ﻿using Api.Controllers.Tasks;
+using Api.Controllers.Tasks.Request;
 using Api.Controllers.Tasks.Response;
 using Api.UseCases.Tasks.Interfaces;
 using Logic.TaskEntity.Models;
@@ -93,6 +94,83 @@ namespace Tests.UnitTests
 
             Assert.NotNull(result);
             Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async Task UpdateTitleWhenDataIsValid()
+        {
+            var id = Guid.NewGuid();
+            var titledto = new SetTaskTitleRequest() { Title ="new_test"};
+
+            manageTaskUseCase.Setup(uc => uc.SetTaskTitleAsync(id, titledto.Title, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+            var result = await taskController.RenameTask(id, titledto, CancellationToken.None); // поменять титл на дто
+
+            Assert.NotNull(result);
+            Assert.IsType<NoContentResult>(result);
+        }
+
+        [Fact]
+        public async Task UpdateTitleWhenTaskDoesntExists()
+        {
+            var id = Guid.NewGuid();
+            var titledto = new SetTaskTitleRequest() { Title = "new_test" };
+
+            manageTaskUseCase.Setup(uc => uc.SetTaskTitleAsync(id, titledto.Title, It.IsAny<CancellationToken>())).ReturnsAsync(false);
+
+            var result = await taskController.RenameTask(id, titledto, CancellationToken.None); // поменять титл на дто
+
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async Task UpdateTitleWhenDataDoesntValid()
+        {
+            var id = Guid.NewGuid();
+            var titledto = new SetTaskTitleRequest() { Title = "    " };
+
+            manageTaskUseCase.Setup(uc => uc.SetTaskTitleAsync(id, titledto.Title, It.IsAny<CancellationToken>())).ReturnsAsync(false);
+
+            var result = await taskController.RenameTask(id, titledto, CancellationToken.None);
+
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async Task CreateTaskWhenDataIsValid()
+        {
+            var title = "test";
+            var userId = Guid.NewGuid();
+            var request = new CreateTaskRequest() { Title= title };
+            var taskResponse = new TaskResponse(new TaskModel(title,userId));
+            manageTaskUseCase.Setup(uc => uc.CreateTaskAsync(title,userId,It.IsAny<CancellationToken>())).ReturnsAsync(taskResponse);
+
+            var result = taskController.CreateTaskAsync(request, CancellationToken.None);
+
+            Assert.NotNull(result);
+            var createdResult = Assert.IsType<CreatedResult>(result);
+            var task = Assert.IsType<TaskResponse>(createdResult);
+            Assert.Equal(title, task.Title);
+            Assert.Equal(userId, task.CreatedByUserId);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData("    ")]
+
+        public async Task CreateTaskWhenTitleIsEmptyOrWhiteSpaces(string title)
+        {
+            var userId = Guid.NewGuid();
+            var request = new CreateTaskRequest() {Title= title };
+
+            manageTaskUseCase.Setup(uc => uc.CreateTaskAsync(title, userId, It.IsAny<CancellationToken>())).ReturnsAsync((TaskResponse?)null);
+
+            var result = await taskController.CreateTaskAsync(request,CancellationToken.None);
+
+            Assert.IsType<BadRequestResult>(result);
         }
 
     }
