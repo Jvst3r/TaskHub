@@ -164,13 +164,13 @@ namespace Tests.UnitTests
         public async Task CreateTaskWhenTitleIsEmptyOrWhiteSpaces(string title)
         {
             var userId = Guid.NewGuid();
-            var request = new CreateTaskRequest() {Title= title };
+            var request = new CreateTaskRequest { Title = title };
 
-            manageTaskUseCase.Setup(uc => uc.CreateTaskAsync(title, userId, It.IsAny<CancellationToken>())).ReturnsAsync((TaskResponse?)null);
+            var result = await taskController.CreateTaskAsync(request, CancellationToken.None);
 
-            var result = await taskController.CreateTaskAsync(request,CancellationToken.None);
-
-            Assert.IsType<BadRequestResult>(result);
+            var objectResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(201, objectResult.StatusCode);
+            Assert.Null(objectResult.Value);
         }
 
     }
