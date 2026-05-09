@@ -1,4 +1,5 @@
-﻿using Api.Controllers.Tasks.Request;
+﻿using Api.Attributes.Filters;
+using Api.Controllers.Tasks.Request;
 using Api.UseCases.Tasks.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ namespace Api.Controllers.Tasks
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
+        [ServiceFilter(typeof(RequestLoggingFilter))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllTasks(
@@ -33,6 +36,8 @@ namespace Api.Controllers.Tasks
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
+        [ServiceFilter(typeof(RequestLoggingFilter))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -57,6 +62,9 @@ namespace Api.Controllers.Tasks
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
+        [ServiceFilter(typeof(RequestLoggingFilter))]
+        [ServiceFilter(typeof(ValidateCreateTaskRequestFilter))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateTaskAsync(
@@ -81,6 +89,9 @@ namespace Api.Controllers.Tasks
         }
 
         [HttpPatch("{id}/title")]
+        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
+        [ServiceFilter(typeof(RequestLoggingFilter))]
+        [ServiceFilter(typeof(ValidateSetTaskTitleRequestFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RenameTask(
@@ -111,6 +122,8 @@ namespace Api.Controllers.Tasks
 
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
+        [ServiceFilter(typeof(RequestLoggingFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -136,6 +149,8 @@ namespace Api.Controllers.Tasks
         }
 
         [HttpDelete]
+        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
+        [ServiceFilter(typeof(RequestLoggingFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteAllTasksAsync(
