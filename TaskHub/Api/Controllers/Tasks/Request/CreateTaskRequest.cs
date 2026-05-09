@@ -2,6 +2,7 @@
 {
     public sealed class CreateTaskRequest
     {
+        public Guid UserId { get; set; }
         public string Title { get; set; }
     }
 }

@@ -28,13 +28,15 @@ namespace Api.Controllers.Tasks
                 var tasks = await taskUseCase.GetAllTasksAsync(cancellationToken);
                 return Ok(tasks);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return StatusCode(500, "Ошибка при получении задач!");
             }
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
+        [ServiceFilter(typeof(RequestLoggingFilter))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -52,13 +54,16 @@ namespace Api.Controllers.Tasks
 
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return StatusCode(500, $"Ошибка при получении задачи с id:{id}!");
             }
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
+        [ServiceFilter(typeof(RequestLoggingFilter))]
+        [ServiceFilter(typeof(ValidateCreateTaskRequestFilter))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateTaskAsync(
@@ -83,6 +88,9 @@ namespace Api.Controllers.Tasks
         }
 
         [HttpPatch("{id}/title")]
+        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
+        [ServiceFilter(typeof(RequestLoggingFilter))]
+        [ServiceFilter(typeof(ValidateSetTaskTitleRequestFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RenameTask(
@@ -104,7 +112,7 @@ namespace Api.Controllers.Tasks
 
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //logger.log("Ошибка в методе RenameTask!");
                 return StatusCode(500, "Ошибка сервера при изменении названия задачи!");
@@ -113,6 +121,8 @@ namespace Api.Controllers.Tasks
 
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
+        [ServiceFilter(typeof(RequestLoggingFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -131,13 +141,15 @@ namespace Api.Controllers.Tasks
 
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, $"Ошибка сервера при удалении задачи с id:{id}!");
             }
         }
 
         [HttpDelete]
+        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
+        [ServiceFilter(typeof(RequestLoggingFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteAllTasksAsync(
@@ -148,7 +160,7 @@ namespace Api.Controllers.Tasks
                 await taskUseCase.DeleteAllTasksAsync(cancellationToken);
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Ошибка при удалении всех задач!");
             }
