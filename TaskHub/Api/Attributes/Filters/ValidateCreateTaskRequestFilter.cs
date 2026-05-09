@@ -27,7 +27,7 @@ namespace Api.Attributes.Filters
             }
 
             var title = dto.Title;
-            if (string.IsNullOrEmpty(title))
+            if (string.IsNullOrWhiteSpace(title))
             {
                 context.Result = new BadRequestObjectResult("Название задачи не задано");
                 return;

@@ -93,7 +93,20 @@ namespace Tests.IntegrationTests
             Assert.Equal(request.Title, task.Title);
             Assert.Equal(request.UserId, task.CreatedByUserId);
         }
-        public async Task CreateTaskWhenTitleEmpty() { }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData("    ")]
+        public async Task CreateTaskWhenTitleEmpty(string title) 
+        {
+            var userId = Guid.Parse("62fd3021-9f6a-44df-8156-2062aa77607c");
+            var request = new CreateTaskRequest { Title = title, UserId = userId };
+            var response = await client.PostAsJsonAsync("/tasks", request);
+
+            Assert.NotNull(response);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
         public async Task CreateTaskWhenUserIdEmpty() { }
         public async Task RenameTaskWhenValidData() { }
         public async Task RenameTaskWhenTitleEmpty() { }
