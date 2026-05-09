@@ -107,8 +107,61 @@ namespace Tests.IntegrationTests
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
-        public async Task CreateTaskWhenUserIdEmpty() { }
-        public async Task RenameTaskWhenValidData() { }
-        public async Task RenameTaskWhenTitleEmpty() { }
+
+        [Fact]
+        public async Task RenameTaskWhenValidData()
+        {
+            var userId = Guid.Parse("62fd3021-9f6a-44df-8156-2062aa77607c");
+            var oldTitle = "old";
+            var createRequest = new CreateTaskRequest { Title = oldTitle, UserId = userId };
+            var createResponse = await client.PostAsJsonAsync("/tasks", createRequest);
+            Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
+            var jsonResponse = await createResponse.Content.ReadFromJsonAsync<TaskResponse>();
+            var id = jsonResponse.Id;
+
+            var newTitle = "new_test_title";
+            var request = new SetTaskTitleRequest() { Title = newTitle };
+
+            var response = await client.PatchAsJsonAsync($"tasks/{id}/title", request);
+
+            Assert.NotNull(response);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData("    ")]
+        public async Task RenameTaskWhenTitleEmpty(string title) 
+        {
+            var userId = Guid.Parse("62fd3021-9f6a-44df-8156-2062aa77607c");
+            var oldTitle = "old";
+            var createRequest = new CreateTaskRequest { Title = oldTitle, UserId = userId };
+            var createResponse = await client.PostAsJsonAsync("/tasks", createRequest);
+            Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
+            var id = createResponse.Content.ReadFromJsonAsync<TaskResponse>().Id;
+
+            var request = new SetTaskTitleRequest() { Title = title };
+
+            var response = await client.PatchAsJsonAsync($"tasks/{id}/title", request);
+
+            Assert.NotNull(response);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task RenameTaskWhenTaskNotExists()
+        {
+            var id = Guid.NewGuid();
+            var title = "not_exists";
+            var request = new SetTaskTitleRequest() { Title = title };
+
+            var response = await client.PatchAsJsonAsync($"tasks/{id}/title", request);
+
+            Assert.NotNull(response);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+            
+        }
     }
 }
