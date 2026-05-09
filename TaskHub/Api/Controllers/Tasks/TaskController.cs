@@ -1,4 +1,4 @@
-﻿using Api.Attributes.Filters;
+﻿using Api.Attributes.ModelBinders;
 using Api.Controllers.Tasks.Request;
 using Api.UseCases.Tasks.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 namespace Api.Controllers.Tasks
 {
     [Route("tasks")]
+    [ApiController]
     public sealed class TaskController : ControllerBase
     {
         private readonly IManageTaskUseCase taskUseCase;
@@ -16,9 +17,7 @@ namespace Api.Controllers.Tasks
             taskUseCase = _taskUseCase;
         }
 
-        [HttpGet]
-        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
-        [ServiceFilter(typeof(RequestLoggingFilter))]
+        [HttpGet("all")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllTasks(
@@ -41,7 +40,7 @@ namespace Api.Controllers.Tasks
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTaskById([FromRoute] Guid id,
+        public async Task<IActionResult> GetTaskById([FromRouteTaskId] Guid id,
         CancellationToken cancellationToken)
         {
             try
@@ -95,7 +94,7 @@ namespace Api.Controllers.Tasks
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RenameTask(
-            [FromRoute] Guid id,
+            [FromRouteTaskId] Guid id,
             [FromBody] SetTaskTitleRequest request,
             CancellationToken cancellationToken)
         {
@@ -128,7 +127,7 @@ namespace Api.Controllers.Tasks
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteTaskByIdAsync(
-            [FromRoute] Guid id,
+            [FromRouteTaskId] Guid id,
             CancellationToken cancellationToken)
         {
             try

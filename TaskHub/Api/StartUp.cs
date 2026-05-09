@@ -13,7 +13,7 @@ using Logic.TaskEntity.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using DatabaseLibrary;
-using Api.Attributes.Filters;
+using Api.Attributes.ModelBinders;
 namespace Api;
 
 /// <summary>
