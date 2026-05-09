@@ -1,4 +1,5 @@
-﻿using Api.Attributes.ModelBinders;
+﻿using Api.Attributes.Filters;
+using Api.Attributes.ModelBinders;
 using Api.Controllers.Tasks.Request;
 using Api.UseCases.Tasks.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace Api.Controllers.Tasks
             taskUseCase = _taskUseCase;
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllTasks(

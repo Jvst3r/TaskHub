@@ -65,7 +65,16 @@ namespace Tests.IntegrationTests
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
-        public async Task GetTaskByIdWhenInvalidGuid() { }
+
+        [Fact]
+        public async Task GetTaskByIdWhenInvalidGuid() 
+        {
+            var wrongId = "gg_wrong_test";
+
+            var response = await client.GetAsync($"tasks/wrongId");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
         public async Task CreateTaskWhenValidData() { }
         public async Task CreateTaskWhenTitleEmpty() { }
         public async Task CreateTaskWhenUserIdEmpty() { }
