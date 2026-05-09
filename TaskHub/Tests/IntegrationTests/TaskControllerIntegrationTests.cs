@@ -55,7 +55,16 @@ namespace Tests.IntegrationTests
 
             Assert.Equal(createRequest.Title, task.Title);
         }
-        public async Task GetTaskByIdWhenTaskNotFound() { }
+
+        [Fact]
+        public async Task GetTaskByIdWhenTaskNotFound() 
+        {
+            var notExistedTaskId = Guid.NewGuid();
+
+            var response = await client.GetAsync($"/tasks/{notExistedTaskId}");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
         public async Task GetTaskByIdWhenInvalidGuid() { }
         public async Task CreateTaskWhenValidData() { }
         public async Task CreateTaskWhenTitleEmpty() { }
