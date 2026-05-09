@@ -143,15 +143,22 @@ namespace Tests.UnitTests
         {
             var title = "test";
             var userId = Guid.NewGuid();
-            var request = new CreateTaskRequest() { Title= title };
-            var taskResponse = new TaskResponse(new TaskModel(title,userId));
-            manageTaskUseCase.Setup(uc => uc.CreateTaskAsync(title,userId,It.IsAny<CancellationToken>())).ReturnsAsync(taskResponse);
+            var request = new CreateTaskRequest() { Title = title };
+            var taskResponse = new TaskResponse(new TaskModel(title, userId));
 
-            var result = taskController.CreateTaskAsync(request, CancellationToken.None);
+            manageTaskUseCase
+                .Setup(uc => uc.CreateTaskAsync(title, It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(taskResponse);
+
+            var result = await taskController.CreateTaskAsync(request, CancellationToken.None);
 
             Assert.NotNull(result);
-            var createdResult = Assert.IsType<CreatedResult>(result);
-            var task = Assert.IsType<TaskResponse>(createdResult);
+
+            var objectResult = Assert.IsType<ObjectResult>(result);
+
+            Assert.Equal(201, objectResult.StatusCode);
+
+            var task = Assert.IsType<TaskResponse>(objectResult.Value);
             Assert.Equal(title, task.Title);
             Assert.Equal(userId, task.CreatedByUserId);
         }

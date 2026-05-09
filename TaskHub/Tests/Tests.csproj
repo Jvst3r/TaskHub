@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ApiTests\" />
+    <Folder Include="IntegrationTests\" />
   </ItemGroup>
 
 </Project>
