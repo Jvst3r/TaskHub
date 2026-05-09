@@ -25,5 +25,15 @@ namespace Tests.IntegrationTests
             response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
+
+        [Fact]
+        public async Task GetTaskByIdWhenTaskExists() { }
+        public async Task GetTaskByIdWhenTaskNotFound() { }
+        public async Task GetTaskByIdWhenInvalidGuid() { }
+        public async Task CreateTaskWhenValidData() { }
+        public async Task CreateTaskWhenTitleEmpty() { }
+        public async Task CreateTaskWhenUserIdEmpty() { }
+        public async Task RenameTaskWhenValidData() { }
+        public async Task RenameTaskWhenTitleEmpty() { }
     }
 }
