@@ -2,6 +2,8 @@
 using Api.Controllers.Tasks.Response;
 using Api.UseCases.Tasks.Interfaces;
 using Logic.TaskEntity.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -30,10 +32,13 @@ namespace Tests.UnitTests
 
             var result = await taskController.GetAllTasks(CancellationToken.None);
 
-            Assert.NotNull(result);
-            Assert.IsType<TaskListResponse>(result); //новый для меня метод для проверки,
-                                                     //приколдес че сказать, я так понял в API-тестах там всё что тестится - это типы значений
-            Assert.Equal(0, result.);
+
+            var okResult = Assert.IsType<OkObjectResult>(result);//новый для меня метод для проверки,
+                                                                 //приколдес че сказать, я так понял в API-тестах там всё что тестится - это типы значений
+            var returnValue = Assert.IsType<TaskListResponse>(okResult.Value);
+
+            Assert.Empty(returnValue.TaskList);
+            Assert.Equal(200, okResult.StatusCode);
         }
 
         [Fact]
@@ -48,10 +53,46 @@ namespace Tests.UnitTests
 
             var result = await taskController.GetAllTasks(CancellationToken.None);
 
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnValue = Assert.IsType<TaskListResponse>(okResult.Value);
+
+            Assert.Single(returnValue.TaskList); ///еще новый прикол это метод сингл
+            Assert.Equal(200, okResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteAllTasksAsync()
+        {
+            manageTaskUseCase.Setup(uc => uc.DeleteAllTasksAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+
+            var result = await taskController.DeleteAllTasksAsync(CancellationToken.None);
+
             Assert.NotNull(result);
-            Assert.IsType<TaskListResponse>(result); 
-            Assert.Equal(0, result.TaskList.Count);
-            Assert.Equal(StatusCode.Ok)
+            var actionResult = Assert.IsType<NoContentResult>(result);
+        }
+
+        [Fact]
+        public async Task DeleteTaskByIdAsyncWhenTaskExists()
+        {
+            var id = Guid.NewGuid();
+            manageTaskUseCase.Setup(uc => uc.DeleteTaskAsync(id, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+            var result = await taskController.DeleteTaskByIdAsync(id, CancellationToken.None);
+
+            Assert.NotNull(result);
+            Assert.IsType<NoContentResult>(result);
+        }
+
+        [Fact]
+        public async Task DeleteTaskByIdAsyncWhenTaskDoesntExist()
+        {
+            var id = Guid.NewGuid();
+            manageTaskUseCase.Setup(uc => uc.DeleteTaskAsync(id, It.IsAny<CancellationToken>())).ReturnsAsync(false);
+
+            var result = await taskController.DeleteTaskByIdAsync(id, CancellationToken.None);
+
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundResult>(result);
         }
 
     }
