@@ -75,7 +75,24 @@ namespace Tests.IntegrationTests
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
-        public async Task CreateTaskWhenValidData() { }
+
+        [Fact]
+        public async Task CreateTaskWhenValidData() 
+        {
+            var userId = Guid.Parse("62fd3021-9f6a-44df-8156-2062aa77607c"); //отрывок хардкода из TaskController, решил там ничего не менять
+            var title = "возьмите меня на практику пожалуйста:)";
+            var request = new CreateTaskRequest { Title = title, UserId = userId };
+            var response = await client.PostAsJsonAsync("/tasks", request);
+
+            Assert.NotNull(response);
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+            var task = await response.Content.ReadFromJsonAsync<TaskResponse>();
+
+            Assert.NotNull(task);
+            Assert.Equal(request.Title, task.Title);
+            Assert.Equal(request.UserId, task.CreatedByUserId);
+        }
         public async Task CreateTaskWhenTitleEmpty() { }
         public async Task CreateTaskWhenUserIdEmpty() { }
         public async Task RenameTaskWhenValidData() { }
