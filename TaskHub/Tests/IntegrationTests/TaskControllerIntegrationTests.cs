@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Api.Controllers.Tasks.Request;
+using Api.Controllers.Tasks.Response;
+using Logic.TaskEntity.Models;
+using Microsoft.AspNetCore.Mvc.Testing;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http.Json;
 using System.Text;
 
 namespace Tests.IntegrationTests
@@ -27,7 +31,30 @@ namespace Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task GetTaskByIdWhenTaskExists() { }
+        public async Task GetTaskByIdWhenTaskExists() 
+        {
+            var createRequest = new CreateTaskRequest
+            {
+                Title = "test",
+                UserId = Guid.NewGuid()
+            };
+
+            var createResponse = await client.PostAsJsonAsync("/tasks", createRequest);
+
+            createResponse.EnsureSuccessStatusCode();
+
+            var createdTask = await createResponse.Content.ReadFromJsonAsync<TaskResponse>();
+            Assert.NotNull(createdTask);
+
+            var response = await client.GetAsync($"/tasks/{createdTask.Id}");
+
+            Assert.NotNull(response);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var task = await response.Content.ReadFromJsonAsync<TaskResponse>();
+
+            Assert.Equal(createRequest.Title, task.Title);
+        }
         public async Task GetTaskByIdWhenTaskNotFound() { }
         public async Task GetTaskByIdWhenInvalidGuid() { }
         public async Task CreateTaskWhenValidData() { }
