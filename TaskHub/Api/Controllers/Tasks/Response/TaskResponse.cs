@@ -3,6 +3,7 @@
 {
     public sealed class TaskResponse
     {
+        public TaskResponse() { }
         public TaskResponse(Logic.TaskEntity.Models.TaskModel task)
         {
             this.Id = task.Id;

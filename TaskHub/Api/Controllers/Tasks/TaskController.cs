@@ -1,4 +1,5 @@
 ﻿using Api.Attributes.Filters;
+using Api.Attributes.ModelBinders;
 using Api.Controllers.Tasks.Request;
 using Api.UseCases.Tasks.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using System.Runtime.CompilerServices;
 namespace Api.Controllers.Tasks
 {
     [Route("tasks")]
+    [ApiController]
     public sealed class TaskController : ControllerBase
     {
         private readonly IManageTaskUseCase taskUseCase;
@@ -17,8 +19,6 @@ namespace Api.Controllers.Tasks
         }
 
         [HttpGet]
-        [ServiceFilter(typeof(StudentInfoHeadersFilter))]
-        [ServiceFilter(typeof(RequestLoggingFilter))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllTasks(
@@ -29,7 +29,7 @@ namespace Api.Controllers.Tasks
                 var tasks = await taskUseCase.GetAllTasksAsync(cancellationToken);
                 return Ok(tasks);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return StatusCode(500, "Ошибка при получении задач!");
             }
@@ -41,7 +41,7 @@ namespace Api.Controllers.Tasks
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTaskById([FromRoute] Guid id,
+        public async Task<IActionResult> GetTaskById([FromRouteTaskId] Guid id,
         CancellationToken cancellationToken)
         {
             try
@@ -55,7 +55,7 @@ namespace Api.Controllers.Tasks
 
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return StatusCode(500, $"Ошибка при получении задачи с id:{id}!");
             }
@@ -95,7 +95,7 @@ namespace Api.Controllers.Tasks
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RenameTask(
-            [FromRoute] Guid id,
+            [FromRouteTaskId] Guid id,
             [FromBody] SetTaskTitleRequest request,
             CancellationToken cancellationToken)
         {
@@ -113,7 +113,7 @@ namespace Api.Controllers.Tasks
 
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //logger.log("Ошибка в методе RenameTask!");
                 return StatusCode(500, "Ошибка сервера при изменении названия задачи!");
@@ -128,7 +128,7 @@ namespace Api.Controllers.Tasks
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteTaskByIdAsync(
-            [FromRoute] Guid id,
+            [FromRouteTaskId] Guid id,
             CancellationToken cancellationToken)
         {
             try
@@ -142,7 +142,7 @@ namespace Api.Controllers.Tasks
 
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, $"Ошибка сервера при удалении задачи с id:{id}!");
             }
@@ -161,7 +161,7 @@ namespace Api.Controllers.Tasks
                 await taskUseCase.DeleteAllTasksAsync(cancellationToken);
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Ошибка при удалении всех задач!");
             }
